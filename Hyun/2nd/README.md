@@ -106,9 +106,13 @@ Address: 223.130.195.95
 - naver → 도메인 명
 - com → 최상위 도메인 명
 
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%204.png)
+
+도메인 주소 맨 뒤에는 `.` 이 생략되어있다. 
+
 ### URL의 구조
 
-![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%204.png)
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%205.png)
 
 - path( / )
     - 파일의 경로를 가리키며 `/` 뒤에 나온다.
@@ -130,7 +134,7 @@ Address: 223.130.195.95
 
 브라우저의 검색창에 도메인 이름을 입력하여 해당 사이트로 이동하기 위해서는, 해당 도메인 이름과 매칭된 **IP주소를 확인하는 작업이 반드시 필요**하다.
 
-네트워크에는 이 확인하는 작업을 위한 별도의 서버가 있는데 이것이 바로 DNS서버이다.
+네트워크에는 이 확인하는 작업을 위한 별도의 서버가 있는데 이것이 바로 **DNS서버**이다.
 
 ### DNS의 역할
 
@@ -140,7 +144,58 @@ DNS는 Domain Name System의 줄임말로, **호스트의 도메인 이름을 IP
 
 DNS 시스템안에서 이여주는 역할을 하는 서버를 풀네임으로 DNS 서버라고 한다.
 
-![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%205.png)
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%206.png)
+
+Root DNS → Top-Level 서브 → 책임서버로 찾아 내려가는 계층 구조로 이루어져 있다. 
+
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%207.png)
+
+### Root DNS
+
+DNS와 특정 프로토콜들의 제한, 즉 파편화되지 않은 사용자 데이터그램 프로토콜(UDP) 패킷의 실질적인 크기 제한으로 인해 **루트 서버 수를 13개 서버 주소로 제한**하도록 결정됨(A~M).
+
+### Top-level DNS
+
+최상위 도메인(Top-level domain, TLD)은 인터넷에서 도메인 네임의 가장 마지막 부분을 말한다. 예를 들어 `ko.wikipedia.org`의 최상위 도메인은 `.org`가 된다. 최상위 도메인은 `.com`과 같은 **일반 최상위 도메인**과 `.kr` 같은 **국가 코드 최상위 도메인**으로 나뉜다.
+
+가령, [베리사인](https://ko.wikipedia.org/wiki/%EB%B2%A0%EB%A6%AC%EC%82%AC%EC%9D%B8) 글로벌 레지스트리 서비스 사는 `com` TLD에 대한 TLD 서버를 담당하고 있다고 한다.
+
+### Authorative Name Server
+
+책임 DNS 서버. 조직 자체 DNS서버, 조직의 명명된 호스트에 대한 IP매핑에 권한있는 호스트 이름을 제공. 조직 또는 서비스 제공업체에 의해 유지보수가 가능
+
+## DNS 구성
+
+### 구성요소
+
+- Registrant 등록자 : 일반인(고객). 대부분은 여기에 속함
+- Registrar 등록대행자 : Cafe24, 닷홈 같은 도메인 대행 등록 업체들이 존재한다. 1년에 2~3만원이면 내아이피에 도메인을 등록할 수 있다.
+- Registry 등록소 : 최상위 도메인을 관리하는 역할을 한다. 일례로 베리사인 글로벌 레지스트리 서비스 사가 `com`을 관리하고, 에듀코즈 사가 `edu`를 관리하고 있다.
+- ICANN : 국제인터넷주소관리기구(Internet Corporation for Assigned Names and Numbers, ICANN)는 1998년에 설립된 인터넷의 비즈니스, 기술계, 학계 및 사용자 단체 등으로 구성된 기관으로 인터넷 DNS의 기술적 관리, IP 주소공간 할당, 프로토콜 파라미터 지정, 루트 서버 시스템 관리 등의 업무를 조정하는 역할을 한다.
+
+### 등록과정
+
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%208.png)
+
+1. 우리는 93.184.216.34라는 서버를 가지고 있다. 이 서버에다가 `example.com`이라는 도메인을 부여하고 싶다.
+2. 우리는 `example.com`과 IP, 약간의 수수료를 Registrar 등록대행자에게 보내면서 등록 신청을 한다.
+3. Registrar 등록대행자는 Authorative Name Server(a.iana-servers.net)에다가 example.com은 93.184.216.34라는 것을 등록한다. 이 Authorative Name Server는 자신이 직접 구축할 수도 있고 무료를 이용할 수 있고 지금처럼 Registrar 등록대행자를 이용할 수도 있다.
+4. Registrar 등록대행자는 `example.com`의 NS(Name Server)는 a.iana-servers.net이라는 것을 Registry 등록소에게 알려준다.
+5. Registry 등록소는 Top-level Domain Sever(a.gtId-servers.net)에다가 마찬가지로 example.com의 NS는 a.iana-servers.net라는 것을 등록한다.
+6. ICANN이 관리하는 Root Name Server(a.root-servers.net)은 이미 com의 Top-level Domain Sever가 a.gtId-servers.net라는 것을 알고 있다.
+
+### 도메인 탐색
+
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%209.png)
+
+1. 이제 클라이언트가 여러분의 서버에 접속하려고 한다. 클라이언트는 이미 DNS Sever가 등록되어있다. 예를 들어 앞서 KT가 168.126.63.1인 것처럼.
+2. DNS Sever는 Root Name Server가 무엇인지 이미 가지고 있다. 따라서 a.root-servers.net을 이미 알고 있다. 물론 여러개를 알고 있겠지?
+3. 우리의 서버는 example.com이라고 등록되어있다. 따라서 example.com의 IP가 무엇인지 알아야 한다. DNS Server는 Root Name Server에게 물어본다. Root Name Server는 com을 보고 com을 관리하는 Top-level domain을 알려준다.
+4. 다시 DNS Server는 Top-level domain을 관리하는 a.gtId-servers.net에 가서 물러본다. a.gtId-servers.net는 example.com이 a.iana-servers.net이 관리한다는 것을 알고 있다.
+5. 다시 DNS는 Server는 a.iana-servers.net에 가서 example.com에 대해 물어본다. 드디어 93.184.216.34를 획득할 수 있는 것이다.
+6. 최종적으로 클라이언트는 93.184.216.34로 서버에게 요청해서 웹 페이지를 받아볼 수 있는 것이다.
+
+![Untitled](DNS%209a162d5c9f364b60b87c6b5a8c06cbc4/Untitled%2010.png)
 
 1. 사용자가 웹 브라우저를 열어 주소 표시줄에 www.example.com을 입력하고 Enter 키를 입력
 2. www.example.com에 대한 요청은 일반적으로 케이블 인터넷 공급업체, DSL 광대역 공급업체 또는 기업 네트워크 같은 인터넷 서비스 제공업체(ISP)가 관리하는 DNS 해석기로 라우팅
