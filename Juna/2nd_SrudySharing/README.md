@@ -1,4 +1,4 @@
-# CoP 2회차 공유회 완성
+# CoP2
 
 # 주제: Garbage Collector 근데 JVM을 곁들인 ,,,
 
@@ -31,14 +31,14 @@
 
 - Reference Counting은 Heap 영역에 선언된 객체들이 각각 reference count라는 별도의 숫자를 가지고 있다고 생각하면 좋음. 해당 객체에 접근할 수 있는  방법이 없다면 즉 reference count가 0에 다다르면 GC의 대상이 되는 것
 
-![Untitled](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled.png)
+![Untitled](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled.png)
 
 - Reference Counting의 한계: 순환 참조 문제→ Root Space에서의 Heap space 접근을 모두 끊는 다고 생각했을 때 서로가 서로를 참조하고 있기 때문에 reference count가 1로 유지됨 → 사용하지 않는 메모리 영역이 해제되지 못하고 Memory leak 발생
 - 
 
 ### **2) Mark And Sweep**
 
-![Untitled](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%201.png)
+![Untitled](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%201.png)
 
 - Mark: GC는 GC Root로부터 모든 변수를 스캔하면서 각각 어떤 객체를 참조하고 있는지(연결된 객체를 찾아냄) 찾아서 마킹한다(reachable과 unreachable을 식별하는 과정)
 - Sweep: Unreachable 객체들을 Heap에서 제거하는 과정(연결이 끊어진 객체들은 지운다는 뜻, 힙에서 객체를 제거하는 과정을 쓸어내린다고해서 Sweep)
@@ -52,7 +52,7 @@
 
 ## 3. JVM의 GC - JVM 구조
 
-![Untitled](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%202.png)
+![Untitled](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%202.png)
 
 - JVM은 크게 3가지로 구성됨
     
@@ -66,7 +66,7 @@
 - Metho Area는 프로그램의 클래스 구조를 메타데이터처럼 가지며, 메서드의 코드들을 저장해둠
 - Heap은 어플리케이션 실행 중 생성되는 객체 인스턴스를 저장하는 영역임. 이 **Heap 영역이 오늘 주제인 Garbage Collector에 의해 관리되는 영역**
 
-![Untitled](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%203.png)
+![Untitled](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%203.png)
 
 - JVM의 Heap은 크게 두 영역인 Young Generation과 Old Generation으로 나눔
 - Young Generation에서 발생하는 GC는 minor gc, Old Generation에서 발생하는 GC는 major gc라고 부름
@@ -75,15 +75,15 @@
 - survival 영역에는 특별한 규칙이 하나 있음, survival 0 혹은 survival 1 둘 중 하나는 꼭 비어 있어야 한다는 것
 - 새로운 객체가 계속 생성되다 보면 Eden 영역이 꽉 차는 순간이 오겠죠 → 이때 minor GC가 일어남 → Mark and Sweep이 진행됨
 
-![Untitled](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%204.png)
+![Untitled](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%204.png)
 
 - 루트로부터 reachable이라 판단된 객체는 survival 0 영역으로 옮겨짐 → survival 0으로 옮겨진 객체들의 숫자가 0에서 1로 증가한 거 눈치 채셨나요? 해당 숫자는 age-bit를 뜻함. Minor gc에서 살아남을때마다 1씩 증가
 
-![Untitled](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%205.png)
+![Untitled](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%205.png)
 
 - 시간이 흘러 Eden 영역이 또 꽉 찼음 → Minor gc 발생 → 반복 age-bit가 3이 되었음, 여기서 age- bit의 쓰임새가 밝혀짐, JVM GC에서는 일정 수준의 age- bit를 넘어가면 오래도록 참조될 객체구나라고 판단하여 해당 객체를 Old Generation에 넘겨 줌, 이 과정을 Promotion이라고 함. 자바 8 기준으로는 Parallel Gc방식 age bit가 15가 되면 promotion이 진행됨. 시간이 아주 많이 지나면 old generation도 다 채워지는 날이 옴. 이 때 major GC가 발생하면서  Mark and sweep 방식을 통해 필요 없는 메모리를 비워줌
 
-![GC 영역 및 데이터 흐름도](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%206.png)
+![GC 영역 및 데이터 흐름도](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%206.png)
 
 GC 영역 및 데이터 흐름도
 
@@ -133,7 +133,7 @@ GC 영역 및 데이터 흐름도
 - 런타임에 G1 GC가 필요에 따라 영역별 region 개수를 튜닝한다고 함, 그에 따라 Stop the world를 최소화 할 수 있었다고 함
 - java 9이상부터는 g1 gc를 기본 gc 실행방식으로 사용
 
-![G1 GC의 레이아웃](CoP%202%E1%84%92%E1%85%AC%E1%84%8E%E1%85%A1%20%E1%84%80%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%B2%E1%84%92%E1%85%AC%20%E1%84%8B%E1%85%AA%E1%86%AB%E1%84%89%E1%85%A5%E1%86%BC%205f37c684a9d34c99b8263686908f0c98/Untitled%207.png)
+![G1 GC의 레이아웃](CoP2%205f37c684a9d34c99b8263686908f0c98/Untitled%207.png)
 
 G1 GC의 레이아웃
 
