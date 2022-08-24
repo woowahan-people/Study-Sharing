@@ -57,4 +57,6 @@
 - allow-origin에 허용할 ip를 추가해준다
 - 서버 프레임워크마다 구현 방법은 상이함 (fastApi의 경우 CORSMiddleware import해서 추가해 줄 수 있음 - 공식문서 참조)
 
+# 3차 공유회 
+![javascriptRuntime][./image/javascriptRuntime.png]
 
