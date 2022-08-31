@@ -57,4 +57,32 @@
 - allow-origin에 허용할 ip를 추가해준다
 - 서버 프레임워크마다 구현 방법은 상이함 (fastApi의 경우 CORSMiddleware import해서 추가해 줄 수 있음 - 공식문서 참조)
 
+# 3차 공유회 
+# Javascript Runtime
+![javascriptRuntime](../M_Cho/img/javascriptrRuntime.png)
+## 환경 : 브라우저
+
+## 엔진 
+- Rendering Engine(Blink)
+- Javascript Engine
+
+## Javascript Engine (interpreter)
+- v8 engine (가장 유명함) : chrome, node.js
+- Chakra JavaScript Engine (최근 성능 향상) : edge
+- SpiderMonkey (최초의 자바스크립트 엔진) : firefox
+
+## WebApi 
+브라우저에서 제공하는 API (Window객체)
+![window](../M_Cho/img/window.png)
+
+
+# Event Loop & callback event queue
+while (queue.waitForMessage()) {
+  queue.processNextMessage();
+}
+## 코드 예시 
+![1](../M_Cho/img/1.png)
+![2](../M_Cho/img/2.png)
+![3](../M_Cho/img/3.png)
+![4](../M_Cho/img/4.png)
 
